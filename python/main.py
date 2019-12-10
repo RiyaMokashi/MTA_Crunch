@@ -1,7 +1,7 @@
 import sys 
 import json
 
-import importdata
+import analysis
 
 #getting input
 try:
@@ -10,7 +10,8 @@ try:
 	EndStation = sys.argv[3]
 	ArrivalTime = sys.argv[4] 
 	ArrivalDate = sys.argv[5] 
-except:
+except Exception as e:
+	print("Error:"+str(e))
 	TrainLine = "6"
 	StartStation = "Astor Pl"
 	EndStation = "103 St"
@@ -19,33 +20,22 @@ except:
 
 
 
-try:
-	#importing dataset
-	ss = importdata.NameToID(TrainLine,StartStation)
-	es = importdata.NameToID(TrainLine,EndStation)
-	commute_data = importdata.ImportMTA()
-	DepartureData, ArrivalData = importdata.filterStations(commute_data,ss,es)
-	filteredArrivalData1 = importdata.filterTimes(ArrivalData,ArrivalTime)
-	filteredArrivalData = importdata.filterDates(filteredArrivalData1,ArrivalDate)
-	filteredDepartureData = DepartureData[DepartureData['trip_id'].isin(filteredArrivalData['trip_id'])]
+#analysis
+commute_results = analysis.analyze(TrainLine,StartStation,EndStation,ArrivalTime,ArrivalDate)
 
-
-	#analysis
-except:
-	pass
 
 
 
 #formatting output
 #test output
+
 outputjson = {
 	'train line':TrainLine,
 	'starting station':StartStation,
 	'ending station':EndStation,
 	'arrival time':ArrivalTime,
-	'arrival date':DayofWeek,
-	'data':60,
-	'commute-time':32
+	'arrival date':ArrivalDate,
+	'data':commute_results
 
 }
 

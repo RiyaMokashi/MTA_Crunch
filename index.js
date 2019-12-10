@@ -5,6 +5,7 @@ app.listen(1904,()=> console.log("listening at 1904"));
 app.use(express.static('public'));
 app.use(express.json({limit:'1mb'}));
 
+
 const { spawn } = require('child_process')
 const logOutput = (name) => (message) => console.log(`[${name}] ${message}`)
 //below function taken from "https://codewithhugo.com/integrate-python-ruby-php-shell-with-node-js/" Thank you!
@@ -61,4 +62,11 @@ app.post('/commuterequest',async function(request,response){
 
     response.json(outputjson);
 });
+
+
+
+app.get('/express_backend', (req, res) => {
+  res.send({ express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT' });
+});
+
 

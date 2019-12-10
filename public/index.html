@@ -4,13 +4,29 @@
     <title>MTA Crunch</title>
   </head>
   <body>
+    <h1>MTA Crunch</h1>
+    <p>Departure Station:</p>
+    <input type="text" id="sStation" name="Starting Station" required
+       minlength="4" maxlength="14" size="10">
+    <p>Arrival Station:</p>
+    <input type="text" id="eStation" name="Starting Station" required
+       minlength="4" maxlength="14" size="10">
+    <br><br>
+    <input id="request_commute" type="button" value="get commute time" onclick= "getCommute();"/>
+
+    <p id ="return"> </p>
+    <br>
+    <br>
+    <p id ="data"> </p>
     <script>
 
-      const line = "6";//the 6 train. all lines should be a one character string, letter lines should be capitalized
-      const startS = "Astor Pl";//start and end station must exactly match station names given in stops.txt
-      const endS = "103 St";
+      const line = "R";//the 6 train. all lines should be a one character string, letter lines should be capitalized
+      // const startS = "Astor Pl";//start and end station must exactly match station names given in stops.txt
+      // const endS = "103 St";
       const ATime = "0900";// time of day in string format ranging from 0000 (12:00AM) to 2359 (11:59PM)
       const ADate = "Weekday";// day of week in string format, can only be "Weekday", "Saturday", or "Sunday"
+      let SS = document.getElementById("sStation").value;
+      let ES = document.getElementById("eStation").value;
 
       async function requestCommute(TrainLine, StartStation, EndStation, ArrivalTime, ArrivalDate){
         const data = {TrainLine, StartStation, EndStation, ArrivalTime, ArrivalDate};
@@ -28,17 +44,25 @@
         return response_data;
       }
 
-      requestCommute(line,startS,endS,ATime,ADate).then(response =>{
+      async function getCommute(){
+        document.getElementById("return").innerHTML = "Calculating...";
+        console.log("requesting commute time");
+        var startS = document.getElementById("sStation").value;
+        var endS = document.getElementById("eStation").value;
+
+        requestCommute(line,startS,endS,ATime,ADate).then(response =>{
         commute_data = response;
         console.log(commute_data);
-        document.getElementById("return").innerHTML = JSON.stringify(commute_data);
-      });
+        document.getElementById("return").innerHTML ="Expected Commute Time: " + commute_data.data["mean-commute"] + " mins.";
+        // document.getElementById("data").innerHTML = JSON.stringify(commute_data);
 
-      
+      });}
 
 
     </script>
-    <h1>MTA Crunch</h1>
-    <p id ="return"></p>
+    
   </body>
+  <script>
+    
+  </script>
 </html>
